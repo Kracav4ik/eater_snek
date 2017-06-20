@@ -3,5 +3,7 @@
 MainWindow::MainWindow() {
     setupUi(this);
 
+    canvas->setSnek(snek);
+
     show();
 }

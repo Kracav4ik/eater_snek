@@ -19,6 +19,11 @@ set(EXE_SOURCES
         eater_snek.ui
         MainWindow.cpp
         MainWindow.h
+        CanvasWidget.h
+        CanvasWidget.cpp
+        Snek.h
+        Snek.cpp
+        params.h
         )
 
 add_executable(${EXE_NAME} ${EXE_SOURCES})
