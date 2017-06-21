@@ -6,6 +6,20 @@
 class QPainter;
 class SnekSegment;
 
+enum SegmentRotation{
+    NONE,
+    CW_90,
+    CW_180,
+    CW_270,
+};
+enum SegmentType{
+    HEAD,
+    BODY,
+    RIGHT,
+    LEFT,
+    TAIL
+};
+
 class Snek : public QObject {
 Q_OBJECT
 private:
@@ -14,9 +28,23 @@ private:
 
     void paintSegment(const SnekSegment& segment, QPainter& p) const;
 
+    void shrink();
+
+    void addHead(SegmentType direction);
+
 public:
     void paint(QPainter& p) const;
 
     Snek();
-    virtual ~Snek();
+    ~Snek() override;
+    Snek(const Snek&) = delete;
+    Snek& operator=(const Snek&) = delete;
+
+    void moveForward();
+
+    void moveLeft();
+
+    void moveRight();
+
+    void growUp();
 };

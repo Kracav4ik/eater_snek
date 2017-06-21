@@ -14,5 +14,8 @@ private:
 
 public:
     MainWindow();
+
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
 };
 
