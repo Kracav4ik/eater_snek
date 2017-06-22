@@ -24,6 +24,8 @@ set(EXE_SOURCES
         Snek.h
         Snek.cpp
         params.h
+        Appal.cpp
+        Appal.h
         )
 
 add_executable(${EXE_NAME} ${EXE_SOURCES})

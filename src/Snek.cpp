@@ -69,10 +69,11 @@ Snek::~Snek() {
 void Snek::paintSegment(const SnekSegment& segment, QPainter& p) const{
     p.save();
     p.translate(segment.pos*GRID_SIZE);
-    p.translate(GRID_SIZE/2, GRID_SIZE/2);
+    QPoint center = QPoint(GRID_SIZE, GRID_SIZE) / 2;
+    p.translate(center);
     p.rotate(segment.rotation * 90);
-    p.translate(-GRID_SIZE/2, -GRID_SIZE/2);
-    p.drawImage(QPoint(), img, {GRID_SIZE * segment.type, 0, GRID_SIZE, GRID_SIZE});
+    p.translate(-center);
+    p.drawImage(QPoint(), img, {{GRID_SIZE * segment.type, 0}, GRID_SIZE_2D});
     p.restore();
 }
 
