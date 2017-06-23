@@ -32,8 +32,8 @@ struct SnekSegment{
 void Snek::paint(QPainter& p) const {
     p.fillRect(GRID_SIZE, 2*GRID_SIZE, 5*GRID_SIZE, 3*GRID_SIZE, Qt::magenta);
     p.drawText(2*GRID_SIZE, 4*GRID_SIZE, "S N E K");
-    for (auto it = segments.crbegin(); it != segments.crend(); ++it) {
-        const SnekSegment* segment = *it;
+    for (int i = segments.size(); i > 0 ; --i) {
+        const SnekSegment* segment = segments[i-1];
         paintSegment(*segment, p);
     }
 }
