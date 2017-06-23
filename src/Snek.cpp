@@ -2,6 +2,7 @@
 
 #include "params.h"
 #include <QPainter>
+#include <QCoreApplication>
 
 SegmentRotation rotateLeft(SegmentRotation rotation){
     return SegmentRotation((rotation + 3) % 4);
@@ -52,7 +53,7 @@ QImage loadImage(const QString& path){
     return img;
 }
 
-Snek::Snek(): QObject(nullptr), img(loadImage("../data/snek_appal.png")) {
+Snek::Snek(): QObject(nullptr), img(loadImage(QCoreApplication::applicationDirPath() + "/../data/snek_appal.png")) {
     segments.append(new SnekSegment({10+segments.size(),   10}, SegmentType::HEAD,  SegmentRotation::NONE));
     segments.append(new SnekSegment({10+segments.size(),   10}, SegmentType::LEFT,  SegmentRotation::CW_90));
     segments.append(new SnekSegment({10+segments.size()-1, 11}, SegmentType::RIGHT, SegmentRotation::NONE));
