@@ -13,6 +13,7 @@ MainWindow::MainWindow() {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
+    bool shrink = true;
     switch (event->key()){
         case Qt::Key_W:
             snek.moveForward();
@@ -25,7 +26,23 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
             break;
         case Qt::Key_Space:
             snek.growUp();
+            shrink = false;
             break;
+        case Qt::Key_S:
+            snek.shrinkBody();
+            shrink = false;
+            break;
+        default:
+            return;
+    }
+    for (Appal* appal: appals) {
+        if (snek.getHeadPos() == appal->getPos()){
+            appals.removeOne(appal);
+            shrink = false;
+        }
+    }
+    if (shrink){
+        snek.shrinkBody();
     }
     canvas->update();
 }

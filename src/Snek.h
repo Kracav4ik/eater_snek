@@ -28,12 +28,12 @@ private:
 
     void paintSegment(const SnekSegment& segment, QPainter& p) const;
 
-    void shrink();
-
     void addHead(SegmentType direction);
 
 public:
     void paint(QPainter& p) const;
+
+    const QPoint& getHeadPos();
 
     Snek();
     ~Snek() override;
@@ -47,4 +47,6 @@ public:
     void moveRight();
 
     void growUp();
+
+    void shrinkBody();
 };

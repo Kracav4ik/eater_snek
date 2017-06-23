@@ -98,36 +98,44 @@ QPoint nextPos(const QPoint& pos, SegmentRotation rot){
     return newPos;
 }
 
-void Snek::shrink() {
-    segments.removeLast();
-    SnekSegment* last = segments.last();
-    last->rotation = rotate(last->rotation, last->type);
-    last->type = SegmentType::TAIL;
+void Snek::shrinkBody() {
+    if (segments.size() > 2) {
+        segments.removeLast();
+        SnekSegment* last = segments.last();
+        last->rotation = rotate(last->rotation, last->type);
+        last->type = SegmentType::TAIL;
+    }
 }
 
 void Snek::addHead(SegmentType direction) {
     SnekSegment* first = segments.first();
-    first->type = direction;
     SegmentRotation rot = rotate(first->rotation, direction);
+    if(segments.size() == 1){
+        first->rotation = rot;
+    }
+    else {
+        first->type = direction;
+    }
     SnekSegment* newSegment = new SnekSegment(nextPos(first->pos, rot), SegmentType::HEAD, rot);
     segments.prepend(newSegment);
 }
 
 void Snek::moveForward() {
-    shrink();
     addHead(SegmentType::BODY);
 }
 
 void Snek::moveLeft() {
-    shrink();
     addHead(SegmentType::LEFT);
 }
 
 void Snek::moveRight() {
-    shrink();
     addHead(SegmentType::RIGHT);
 }
 
 void Snek::growUp() {
     addHead(SegmentType::BODY);
+}
+
+const QPoint& Snek::getHeadPos() {
+    return segments.first()->pos;
 }
