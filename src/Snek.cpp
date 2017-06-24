@@ -5,11 +5,11 @@
 #include <QCoreApplication>
 
 SegmentRotation rotateLeft(SegmentRotation rotation){
-    return SegmentRotation((rotation + 3) % 4);
+    return SegmentRotation((static_cast<int>(rotation) + 3) % 4);
 }
 
 SegmentRotation rotateRight(SegmentRotation rotation){
-    return SegmentRotation((rotation + 1) % 4);
+    return SegmentRotation((static_cast<int>(rotation) + 1) % 4);
 }
 
 SegmentRotation rotate(SegmentRotation rotation, SegmentType direction) {
@@ -72,9 +72,9 @@ void Snek::paintSegment(const SnekSegment& segment, QPainter& p) const{
     p.translate(segment.pos*GRID_SIZE);
     QPoint center = QPoint(GRID_SIZE, GRID_SIZE) / 2;
     p.translate(center);
-    p.rotate(segment.rotation * 90);
+    p.rotate(static_cast<int>(segment.rotation) * 90);
     p.translate(-center);
-    p.drawImage(QPoint(), img, {{GRID_SIZE * segment.type, 0}, GRID_SIZE_2D});
+    p.drawImage(QPoint(), img, {{GRID_SIZE * static_cast<int>(segment.type), 0}, GRID_SIZE_2D});
     p.restore();
 }
 

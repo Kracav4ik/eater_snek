@@ -6,13 +6,13 @@
 class QPainter;
 class SnekSegment;
 
-enum SegmentRotation{
+enum class SegmentRotation{
     NONE,
     CW_90,
     CW_180,
     CW_270,
 };
-enum SegmentType{
+enum class SegmentType{
     HEAD,
     BODY,
     RIGHT,

@@ -3,8 +3,11 @@
 #include "Appal.h"
 #include <QKeyEvent>
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(): timer(this) {
     setupUi(this);
+
+    connect(&timer, SIGNAL(timeout()), this, SLOT(processQueue()));
+    timer.start(delay->value());
 
     canvas->setSnek(snek);
     canvas->setAppals(appals);
@@ -13,38 +16,30 @@ MainWindow::MainWindow() {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
-    bool shrink = true;
     switch (event->key()){
         case Qt::Key_W:
-            snek.moveForward();
+            commandsWidget->setText(commandsWidget->text() + "W ");
+            commands.append(Commands::FORWARD);
             break;
         case Qt::Key_A:
-            snek.moveLeft();
+            commandsWidget->setText(commandsWidget->text() + "A ");
+            commands.append(Commands::LEFT);
             break;
         case Qt::Key_D:
-            snek.moveRight();
+            commandsWidget->setText(commandsWidget->text() + "D ");
+            commands.append(Commands::RIGHT);
             break;
         case Qt::Key_Space:
-            snek.growUp();
-            shrink = false;
+            commandsWidget->setText(commandsWidget->text() + u8"｢｣ ");
+            commands.append(Commands::GROW_UP);
             break;
         case Qt::Key_S:
-            snek.shrinkBody();
-            shrink = false;
+            commandsWidget->setText(commandsWidget->text() + "S ");
+            commands.append(Commands::SHRINK);
             break;
         default:
             return;
     }
-    for (Appal* appal: appals) {
-        if (snek.getHeadPos() == appal->getPos()){
-            appals.removeOne(appal);
-            shrink = false;
-        }
-    }
-    if (shrink){
-        snek.shrinkBody();
-    }
-    canvas->update();
 }
 
 void MainWindow::on_canvas_gridClicked(const QPoint& pos) {
@@ -61,4 +56,47 @@ MainWindow::~MainWindow() {
     for (Appal* appal : appals) {
         delete appal;
     }
+}
+
+void MainWindow::processQueue() {
+    if (commands.isEmpty()){
+        return;
+    }
+    commandsWidget->setText(commandsWidget->text().section(' ', 1));
+
+    bool shrink = true;
+    switch (commands.first()){
+        case Commands::FORWARD:
+            snek.moveForward();
+            break;
+        case Commands::LEFT:
+            snek.moveLeft();
+            break;
+        case Commands::RIGHT:
+            snek.moveRight();
+            break;
+        case Commands::GROW_UP:
+            snek.growUp();
+            shrink = false;
+            break;
+        case Commands::SHRINK:
+            snek.shrinkBody();
+            shrink = false;
+            break;
+    }
+    for (Appal* appal: appals) {
+        if (snek.getHeadPos() == appal->getPos()){
+            appals.removeOne(appal);
+            shrink = false;
+        }
+    }
+    if (shrink){
+        snek.shrinkBody();
+    }
+    commands.removeFirst();
+    canvas->update();
+}
+
+void MainWindow::on_delay_valueChanged(int i) {
+    timer.setInterval(i);
 }
