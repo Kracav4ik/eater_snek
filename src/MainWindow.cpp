@@ -3,7 +3,16 @@
 #include "Appal.h"
 #include <QKeyEvent>
 
-MainWindow::MainWindow(): timer(this) {
+MainWindow::MainWindow():
+        timer(this),
+        keybind({
+                {Qt::Key_W,     Commands::FORWARD},
+                {Qt::Key_A,     Commands::LEFT},
+                {Qt::Key_D,     Commands::RIGHT},
+                {Qt::Key_Space, Commands::GROW_UP},
+                {Qt::Key_S,     Commands::SHRINK},
+        })
+{
     setupUi(this);
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(processQueue()));
@@ -16,29 +25,8 @@ MainWindow::MainWindow(): timer(this) {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
-    switch (event->key()){
-        case Qt::Key_W:
-            commandsWidget->setText(commandsWidget->text() + "W ");
-            commands.append(Commands::FORWARD);
-            break;
-        case Qt::Key_A:
-            commandsWidget->setText(commandsWidget->text() + "A ");
-            commands.append(Commands::LEFT);
-            break;
-        case Qt::Key_D:
-            commandsWidget->setText(commandsWidget->text() + "D ");
-            commands.append(Commands::RIGHT);
-            break;
-        case Qt::Key_Space:
-            commandsWidget->setText(commandsWidget->text() + u8"｢｣ ");
-            commands.append(Commands::GROW_UP);
-            break;
-        case Qt::Key_S:
-            commandsWidget->setText(commandsWidget->text() + "S ");
-            commands.append(Commands::SHRINK);
-            break;
-        default:
-            return;
+    if (keybind.contains(event->key())) {
+        appendCommand(keybind[event->key()]);
     }
 }
 
@@ -60,6 +48,9 @@ MainWindow::~MainWindow() {
 
 void MainWindow::processQueue() {
     if (commands.isEmpty()){
+        if (!appals.isEmpty()){
+            toAppal(appals.first()->getPos());
+        }
         return;
     }
     commandsWidget->setText(commandsWidget->text().section(' ', 1));
@@ -99,4 +90,79 @@ void MainWindow::processQueue() {
 
 void MainWindow::on_delay_valueChanged(int i) {
     timer.setInterval(i);
+}
+
+void MainWindow::toAppal(const QPoint& pos) {
+    int dX = snek.getHeadPos().x() - pos.x();
+    int dY = snek.getHeadPos().y() - pos.y();
+    bool left = dX > 0;
+    bool up = dY > 0;
+    dX = abs(dX);
+    dY = abs(dY);
+    switch (snek.getHeadRotation()){
+        case SegmentRotation::NONE:
+            if (dY == 0){
+                left ? forwardTo(dX) : turnRight();
+                return;
+            }
+            equal(!up, dY);
+            break;
+        case SegmentRotation::CW_90:
+            if (dX == 0){
+                up ? forwardTo(dY) : turnLeft();
+                return;
+            }
+            equal(left, dX);
+            break;
+        case SegmentRotation::CW_180:
+            if (dY == 0){
+                !left ? forwardTo(dX) : turnRight();
+                return;
+            }
+            equal(up, dY);
+            break;
+        case SegmentRotation::CW_270:
+            if (dX == 0){
+                !up ? forwardTo(dY) : turnLeft();
+                return;
+            }
+            equal(!left, dX);
+            break;
+    }
+}
+
+void MainWindow::equal(bool rot, int count) {
+    if (count == 0){
+        return;
+    }
+    rot? turnLeft(): turnRight();
+
+    forwardTo(count - 1);
+}
+
+void MainWindow::turnLeft() {
+    appendCommand(Commands::LEFT);
+}
+
+void MainWindow::turnRight() {
+    appendCommand(Commands::RIGHT);
+}
+
+void MainWindow::forwardTo(int count) {
+    for (int i = 0; i < count; ++i){
+        appendCommand(Commands::FORWARD);
+    }
+}
+
+const char* const CMD_TEXT[] = {
+        "W ",       // FORWARD
+        "A ",       // LEFT
+        "D ",       // RIGHT
+        u8"｢｣ ",    // GROW_UP
+        "S ",       // SHRINK
+};
+
+void MainWindow::appendCommand(Commands cmd) {
+    commandsWidget->setText(commandsWidget->text() + CMD_TEXT[static_cast<int>(cmd)]);
+    commands.append(cmd);
 }

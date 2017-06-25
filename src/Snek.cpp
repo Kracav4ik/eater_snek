@@ -140,3 +140,7 @@ void Snek::growUp() {
 const QPoint& Snek::getHeadPos() {
     return segments.first()->pos;
 }
+
+SegmentRotation Snek::getHeadRotation() {
+    return segments.first()->rotation;
+}

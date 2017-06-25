@@ -6,7 +6,7 @@
 class QPainter;
 class SnekSegment;
 
-enum class SegmentRotation{
+enum class SegmentRotation {
     NONE,
     CW_90,
     CW_180,
@@ -34,6 +34,7 @@ public:
     void paint(QPainter& p) const;
 
     const QPoint& getHeadPos();
+    SegmentRotation getHeadRotation();
 
     Snek();
     ~Snek() override;

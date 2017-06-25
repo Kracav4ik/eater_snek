@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QList>
 #include <QTimer>
+#include <QHash>
 
 #include "ui_eater_snek.h"
 
@@ -24,7 +25,16 @@ private:
     Snek snek;
     QList<Appal*> appals;
     QList<Commands> commands;
+    QHash<int, Commands> keybind;
     QTimer timer;
+
+    void toAppal(const QPoint& pos);
+    void equal(bool rot, int count);
+    void forwardTo(int count);
+    void turnRight();
+    void turnLeft();
+
+    void appendCommand(Commands cmd);
 
 private slots:
     void on_canvas_gridClicked(const QPoint& pos);
