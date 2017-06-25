@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QImage>
+#include <QPoint>
 
 class QPainter;
 class SnekSegment;
@@ -12,6 +13,9 @@ enum class SegmentRotation {
     CW_180,
     CW_270,
 };
+SegmentRotation invert(SegmentRotation rot);
+QPoint rotatePoint(const QPoint& point, const QPoint& center, SegmentRotation rotation);
+
 enum class SegmentType{
     HEAD,
     BODY,

@@ -93,42 +93,18 @@ void MainWindow::on_delay_valueChanged(int i) {
 }
 
 void MainWindow::toAppal(const QPoint& pos) {
-    int dX = snek.getHeadPos().x() - pos.x();
-    int dY = snek.getHeadPos().y() - pos.y();
+    QPoint appalPos = rotatePoint(pos, snek.getHeadPos(), invert(snek.getHeadRotation()));
+    int dX = snek.getHeadPos().x() - appalPos.x();
+    int dY = snek.getHeadPos().y() - appalPos.y();
     bool left = dX > 0;
     bool up = dY > 0;
     dX = abs(dX);
     dY = abs(dY);
-    switch (snek.getHeadRotation()){
-        case SegmentRotation::NONE:
-            if (dY == 0){
-                left ? forwardTo(dX) : turnRight();
-                return;
-            }
-            equal(!up, dY);
-            break;
-        case SegmentRotation::CW_90:
-            if (dX == 0){
-                up ? forwardTo(dY) : turnLeft();
-                return;
-            }
-            equal(left, dX);
-            break;
-        case SegmentRotation::CW_180:
-            if (dY == 0){
-                !left ? forwardTo(dX) : turnRight();
-                return;
-            }
-            equal(up, dY);
-            break;
-        case SegmentRotation::CW_270:
-            if (dX == 0){
-                !up ? forwardTo(dY) : turnLeft();
-                return;
-            }
-            equal(!left, dX);
-            break;
+    if (dY == 0){
+        left ? forwardTo(dX) : turnRight();
+        return;
     }
+    equal(!up, dY);
 }
 
 void MainWindow::equal(bool rot, int count) {

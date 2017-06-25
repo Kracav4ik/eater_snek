@@ -21,6 +21,30 @@ SegmentRotation rotate(SegmentRotation rotation, SegmentType direction) {
     return rotation;
 }
 
+SegmentRotation invert(SegmentRotation rot) {
+    if (rot == SegmentRotation::CW_90) {
+        return SegmentRotation::CW_270;
+    }
+    if (rot == SegmentRotation::CW_270) {
+        return SegmentRotation::CW_90;
+    }
+    return rot;
+}
+
+QPoint rotatePoint(const QPoint& point, const QPoint& center, SegmentRotation rotation) {
+    QPoint result = point - center;
+    if (rotation == SegmentRotation::CW_90) {
+        result = QPoint(-result.y(), result.x());
+    }
+    else if (rotation == SegmentRotation::CW_180) {
+        result = QPoint(-result.x(), -result.y());
+    }
+    else if (rotation == SegmentRotation::CW_270) {
+        result = QPoint(result.y(), -result.x());
+    }
+    return result + center;
+}
+
 struct SnekSegment{
     QPoint pos;
     SegmentType type;
