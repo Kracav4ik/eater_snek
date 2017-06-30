@@ -46,12 +46,25 @@ MainWindow::~MainWindow() {
     }
 }
 
+int distance(const QPoint& p1, const QPoint& p2) {
+    return (p1 - p2).manhattanLength();
+}
+
 void MainWindow::processQueue() {
     if (commands.isEmpty()){
-        if (!appals.isEmpty()){
-            toAppal(appals.first()->getPos());
+        if (appals.isEmpty()){
+            return;
         }
-        return;
+        QPoint minPoint = appals.first()->getPos();
+        int minLength = distance(minPoint, snek.getHeadPos());
+        for (Appal* appal: appals) {
+            int length = distance(appal->getPos(), snek.getHeadPos());
+            if (minLength > length) {
+                minLength = length;
+                minPoint = appal->getPos();
+            }
+        }
+        toAppal(minPoint);
     }
     commandsWidget->setText(commandsWidget->text().section(' ', 1));
 
@@ -101,7 +114,11 @@ void MainWindow::toAppal(const QPoint& pos) {
     dX = abs(dX);
     dY = abs(dY);
     if (dY == 0){
-        left ? forwardTo(dX) : turnRight();
+        if (left) {
+            forwardTo(dX);
+        } else {
+            turnRight();
+        }
         return;
     }
     equal(!up, dY);
@@ -111,7 +128,11 @@ void MainWindow::equal(bool rot, int count) {
     if (count == 0){
         return;
     }
-    rot? turnLeft(): turnRight();
+    if (rot) {
+        turnLeft();
+    } else {
+        turnRight();
+    }
 
     forwardTo(count - 1);
 }
