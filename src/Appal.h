@@ -12,7 +12,7 @@ private:
 public:
     void paint(QPainter& p) const;
 
-    Appal(const QPoint& pos);
+    explicit Appal(const QPoint& pos);
 
     Appal(const Appal&) = delete;
     Appal& operator=(const Appal&) = delete;
