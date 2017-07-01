@@ -6,6 +6,7 @@
 #include "params.h"
 #include "Snek.h"
 #include "Appal.h"
+#include "Wall.h"
 
 int pixelToGrid(int pixelPos) {
     return pixelPos/GRID_SIZE/SCALE;
@@ -34,6 +35,11 @@ void CanvasWidget::paintEvent(QPaintEvent* event) {
             appal->paint(p);
         }
     }
+    if (walls) {
+        for (const Wall* wall: *walls) {
+            wall->paint(p);
+        }
+    }
 }
 
 void CanvasWidget::setSnek(const Snek& s) {
@@ -47,9 +53,21 @@ void CanvasWidget::setAppals(const QList<Appal*>& apps) {
 }
 
 void CanvasWidget::mousePressEvent(QMouseEvent* event) {
-    if(event->button() == Qt::LeftButton){
-        int x = pixelToGrid(event->x());
-        int y = pixelToGrid(event->y());
-        emit gridClicked(QPoint(x, y));
+    Qt::MouseButton button = event->button();
+    bool isLeftButton;
+    if(button == Qt::LeftButton){
+        isLeftButton = true;
+    } else if(button == Qt::RightButton){
+        isLeftButton = false;
+    } else {
+        return;
     }
+
+    int x = pixelToGrid(event->x());
+    int y = pixelToGrid(event->y());
+    emit gridClicked(QPoint(x, y), isLeftButton);
+}
+
+void CanvasWidget::setWalls(const QList<Wall*>& wlls) {
+    walls = &wlls;
 }

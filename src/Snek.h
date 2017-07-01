@@ -32,26 +32,18 @@ private:
 
     void paintSegment(const SnekSegment& segment, QPainter& p) const;
 
-    void addHead(SegmentType direction);
-
 public:
     void paint(QPainter& p) const;
 
-    const QPoint& getHeadPos();
-    SegmentRotation getHeadRotation();
+    QPoint getHeadNextPos(SegmentType direction) const;
+    const QPoint& getHeadPos() const;
+    SegmentRotation getHeadRotation() const;
 
     Snek();
     ~Snek() override;
     Snek(const Snek&) = delete;
     Snek& operator=(const Snek&) = delete;
 
-    void moveForward();
-
-    void moveLeft();
-
-    void moveRight();
-
-    void growUp();
-
     void shrinkBody();
+    void addHead(SegmentType direction);
 };

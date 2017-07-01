@@ -26,6 +26,8 @@ set(EXE_SOURCES
         params.h
         Appal.cpp
         Appal.h
+        Wall.cpp
+        Wall.h
         )
 
 add_executable(${EXE_NAME} ${EXE_SOURCES})

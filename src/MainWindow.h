@@ -18,12 +18,14 @@ enum class Commands{
 };
 
 class Appal;
+class Wall;
 
 class MainWindow : public QMainWindow, private Ui::MainWindow {
 Q_OBJECT
 private:
     Snek snek;
     QList<Appal*> appals;
+    QList<Wall*> walls;
     QList<Commands> commands;
     QHash<int, Commands> keybind;
     QTimer timer;
@@ -37,7 +39,7 @@ private:
     void appendCommand(Commands cmd);
 
 private slots:
-    void on_canvas_gridClicked(const QPoint& pos);
+    void on_canvas_gridClicked(const QPoint& pos, bool isLeftButton);
     void processQueue();
     void on_delay_valueChanged(int i);
 

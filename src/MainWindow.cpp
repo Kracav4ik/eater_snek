@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 #include "Appal.h"
+#include "Wall.h"
 #include <QKeyEvent>
 
 MainWindow::MainWindow():
@@ -20,6 +21,7 @@ MainWindow::MainWindow():
 
     canvas->setSnek(snek);
     canvas->setAppals(appals);
+    canvas->setWalls(walls);
 
     show();
 }
@@ -30,13 +32,30 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
     }
 }
 
-void MainWindow::on_canvas_gridClicked(const QPoint& pos) {
-    for (Appal* appal: appals) {
-        if (pos == appal->getPos()){
-            return;
+void MainWindow::on_canvas_gridClicked(const QPoint& pos, bool isLeftButton) {
+    if (isLeftButton) {
+        for (Appal* appal: appals) {
+            if (pos == appal->getPos()){
+                return;
+            }
+        }
+        appals.append(new Appal(pos));
+    } else {
+        Wall* existingWall = nullptr;
+        for (Wall* wall: walls) {
+            if (pos == wall->getPos()){
+                existingWall = wall;
+                break;
+            }
+        }
+        if (existingWall) {
+            walls.removeOne(existingWall);
+            delete existingWall;
+        }
+        else {
+            walls.append(new Wall(pos));
         }
     }
-    appals.append(new Appal(pos));
     canvas->update();
 }
 
@@ -44,10 +63,17 @@ MainWindow::~MainWindow() {
     for (Appal* appal : appals) {
         delete appal;
     }
+    for (Wall* wall : walls) {
+        delete wall;
+    }
 }
 
 int distance(const QPoint& p1, const QPoint& p2) {
     return (p1 - p2).manhattanLength();
+}
+
+int qHash(Commands c){
+    return qHash(static_cast<int>(c));
 }
 
 void MainWindow::processQueue() {
@@ -68,25 +94,31 @@ void MainWindow::processQueue() {
     }
     commandsWidget->setText(commandsWidget->text().section(' ', 1));
 
+    Commands command = commands.takeFirst();
+
+    static const QHash<Commands, SegmentType> commands2segments = {
+            {Commands::FORWARD, SegmentType::BODY},
+            {Commands::LEFT, SegmentType::LEFT},
+            {Commands::RIGHT, SegmentType::RIGHT},
+            {Commands::GROW_UP, SegmentType::BODY},
+    };
+
     bool shrink = true;
-    switch (commands.first()){
-        case Commands::FORWARD:
-            snek.moveForward();
-            break;
-        case Commands::LEFT:
-            snek.moveLeft();
-            break;
-        case Commands::RIGHT:
-            snek.moveRight();
-            break;
-        case Commands::GROW_UP:
-            snek.growUp();
+    if (commands2segments.contains(command)){
+        if (command == Commands::GROW_UP){
             shrink = false;
-            break;
-        case Commands::SHRINK:
-            snek.shrinkBody();
-            shrink = false;
-            break;
+        }
+        SegmentType direction = commands2segments[command];
+        QPoint p = snek.getHeadNextPos(direction);
+        for (Wall* wall : walls) {
+            if (p == wall->getPos()) {
+                return;
+            }
+        }
+        snek.addHead(direction);
+    } else if (command == Commands::SHRINK){
+        snek.shrinkBody();
+        shrink = false;
     }
     for (Appal* appal: appals) {
         if (snek.getHeadPos() == appal->getPos()){
@@ -97,7 +129,6 @@ void MainWindow::processQueue() {
     if (shrink){
         snek.shrinkBody();
     }
-    commands.removeFirst();
     canvas->update();
 }
 
