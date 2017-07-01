@@ -34,6 +34,7 @@ private:
 
 public:
     void paint(QPainter& p) const;
+    QList<QPoint> getSegmentsPoints() const;
 
     QPoint getHeadNextPos(SegmentType direction) const;
     const QPoint& getHeadPos() const;

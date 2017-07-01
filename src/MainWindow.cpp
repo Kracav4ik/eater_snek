@@ -33,9 +33,20 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
 }
 
 void MainWindow::on_canvas_gridClicked(const QPoint& pos, bool isLeftButton) {
+    for (Appal* appal: appals) {
+        if (pos == appal->getPos()) {
+            return;
+        }
+    }
+    for (QPoint snekSegmentPos: snek.getSegmentsPoints()) {
+        if (pos == snekSegmentPos) {
+            return;
+        }
+    }
+
     if (isLeftButton) {
-        for (Appal* appal: appals) {
-            if (pos == appal->getPos()){
+        for (Wall* wall: walls) {
+            if (pos == wall->getPos()) {
                 return;
             }
         }

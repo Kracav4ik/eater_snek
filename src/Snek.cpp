@@ -159,3 +159,11 @@ QPoint Snek::getHeadNextPos(SegmentType direction) const {
     SegmentRotation rot = rotate(first->rotation, direction);
     return nextPos(first->pos, rot);
 }
+
+QList<QPoint> Snek::getSegmentsPoints() const {
+    QList<QPoint> points;
+    for (SnekSegment* segment : segments) {
+        points.append(segment->pos);
+    }
+    return points;
+}
