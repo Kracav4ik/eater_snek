@@ -15,6 +15,8 @@ enum class SegmentRotation {
 };
 SegmentRotation invert(SegmentRotation rot);
 QPoint rotatePoint(const QPoint& point, const QPoint& center, SegmentRotation rotation);
+SegmentRotation combine(SegmentRotation r1, SegmentRotation r2);
+int qHash(const SegmentRotation& p);
 
 enum class SegmentType{
     HEAD,

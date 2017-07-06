@@ -2,23 +2,24 @@
 
 #include <QWidget>
 #include <QList>
+#include "Level.h"
 
 class Snek;
 class QPaintEvent;
 class Appal;
-class Wall;
+class Level;
 
 class CanvasWidget : public QWidget {
 Q_OBJECT
 private:
     const Snek* snek = nullptr;
     const QList<Appal*>* appals = nullptr;
-    const QList<Wall*>* walls = nullptr;
+    const Level* level = nullptr;
 
 public:
     void setSnek(const Snek& s);
     void setAppals(const QList<Appal*>& apps);
-    void setWalls(const QList<Wall*>& list);
+    void setLevel(const Level& lvl);
 
     explicit CanvasWidget(QWidget* parent);
 

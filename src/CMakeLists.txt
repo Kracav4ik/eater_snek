@@ -28,6 +28,10 @@ set(EXE_SOURCES
         Appal.h
         Wall.cpp
         Wall.h
+        Level.cpp
+        Level.h
+        pathfinding.cpp
+        pathfinding.h
         )
 
 add_executable(${EXE_NAME} ${EXE_SOURCES})

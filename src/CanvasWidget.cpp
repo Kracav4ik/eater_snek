@@ -7,6 +7,7 @@
 #include "Snek.h"
 #include "Appal.h"
 #include "Wall.h"
+#include "Level.h"
 
 int pixelToGrid(int pixelPos) {
     return pixelPos/GRID_SIZE/SCALE;
@@ -35,10 +36,8 @@ void CanvasWidget::paintEvent(QPaintEvent* event) {
             appal->paint(p);
         }
     }
-    if (walls) {
-        for (const Wall* wall: *walls) {
-            wall->paint(p);
-        }
+    if (level) {
+        level->paint(p);
     }
 }
 
@@ -68,6 +67,6 @@ void CanvasWidget::mousePressEvent(QMouseEvent* event) {
     emit gridClicked(QPoint(x, y), isLeftButton);
 }
 
-void CanvasWidget::setWalls(const QList<Wall*>& wlls) {
-    walls = &wlls;
+void CanvasWidget::setLevel(const Level& lvl) {
+    level = &lvl;
 }

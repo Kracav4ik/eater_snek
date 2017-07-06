@@ -8,14 +8,9 @@
 #include <QHash>
 
 #include "ui_eater_snek.h"
+#include "Level.h"
+#include "pathfinding.h"
 
-enum class Commands{
-    FORWARD,
-    LEFT,
-    RIGHT,
-    GROW_UP,
-    SHRINK,
-};
 
 class Appal;
 class Wall;
@@ -25,12 +20,12 @@ Q_OBJECT
 private:
     Snek snek;
     QList<Appal*> appals;
-    QList<Wall*> walls;
+    Level level;
     QList<Commands> commands;
     QHash<int, Commands> keybind;
     QTimer timer;
 
-    void toAppal(const QPoint& pos);
+    void toAppal();
     void equal(bool rot, int count);
     void forwardTo(int count);
     void turnRight();

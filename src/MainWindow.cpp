@@ -12,7 +12,8 @@ MainWindow::MainWindow():
                 {Qt::Key_D,     Commands::RIGHT},
                 {Qt::Key_Space, Commands::GROW_UP},
                 {Qt::Key_S,     Commands::SHRINK},
-        })
+        }),
+        level(QRect(2, 2, 10, 10))
 {
     setupUi(this);
 
@@ -21,7 +22,7 @@ MainWindow::MainWindow():
 
     canvas->setSnek(snek);
     canvas->setAppals(appals);
-    canvas->setWalls(walls);
+    canvas->setLevel(level);
 
     show();
 }
@@ -45,26 +46,16 @@ void MainWindow::on_canvas_gridClicked(const QPoint& pos, bool isLeftButton) {
     }
 
     if (isLeftButton) {
-        for (Wall* wall: walls) {
-            if (pos == wall->getPos()) {
-                return;
-            }
+        if (level.getWallAt(pos)) {
+            return;
         }
         appals.append(new Appal(pos));
     } else {
-        Wall* existingWall = nullptr;
-        for (Wall* wall: walls) {
-            if (pos == wall->getPos()){
-                existingWall = wall;
-                break;
-            }
-        }
+        Wall* existingWall = level.getWallAt(pos);
         if (existingWall) {
-            walls.removeOne(existingWall);
-            delete existingWall;
-        }
-        else {
-            walls.append(new Wall(pos));
+            level.removeOneWall(existingWall);
+        }else {
+            level.appendWall(new Wall(pos));
         }
     }
     canvas->update();
@@ -73,9 +64,6 @@ void MainWindow::on_canvas_gridClicked(const QPoint& pos, bool isLeftButton) {
 MainWindow::~MainWindow() {
     for (Appal* appal : appals) {
         delete appal;
-    }
-    for (Wall* wall : walls) {
-        delete wall;
     }
 }
 
@@ -92,16 +80,10 @@ void MainWindow::processQueue() {
         if (appals.isEmpty()){
             return;
         }
-        QPoint minPoint = appals.first()->getPos();
-        int minLength = distance(minPoint, snek.getHeadPos());
-        for (Appal* appal: appals) {
-            int length = distance(appal->getPos(), snek.getHeadPos());
-            if (minLength > length) {
-                minLength = length;
-                minPoint = appal->getPos();
-            }
+        toAppal();
+        if (commands.isEmpty()) {
+            return;
         }
-        toAppal(minPoint);
     }
     commandsWidget->setText(commandsWidget->text().section(' ', 1));
 
@@ -120,11 +102,8 @@ void MainWindow::processQueue() {
             shrink = false;
         }
         SegmentType direction = commands2segments[command];
-        QPoint p = snek.getHeadNextPos(direction);
-        for (Wall* wall : walls) {
-            if (p == wall->getPos()) {
-                return;
-            }
+        if (level.getWallAt(snek.getHeadNextPos(direction))) {
+            return;
         }
         snek.addHead(direction);
     } else if (command == Commands::SHRINK){
@@ -147,23 +126,12 @@ void MainWindow::on_delay_valueChanged(int i) {
     timer.setInterval(i);
 }
 
-void MainWindow::toAppal(const QPoint& pos) {
-    QPoint appalPos = rotatePoint(pos, snek.getHeadPos(), invert(snek.getHeadRotation()));
-    int dX = snek.getHeadPos().x() - appalPos.x();
-    int dY = snek.getHeadPos().y() - appalPos.y();
-    bool left = dX > 0;
-    bool up = dY > 0;
-    dX = abs(dX);
-    dY = abs(dY);
-    if (dY == 0){
-        if (left) {
-            forwardTo(dX);
-        } else {
-            turnRight();
-        }
-        return;
+void MainWindow::toAppal() {
+    Path way = toNearestAppal(snek.getHeadPos(), snek.getHeadRotation(), appals, level);
+    QList<Commands> cmds = fromPointToCommand(way, {snek.getHeadPos(), snek.getHeadRotation()});
+    for (Commands command : cmds) {
+        appendCommand(command);
     }
-    equal(!up, dY);
 }
 
 void MainWindow::equal(bool rot, int count) {

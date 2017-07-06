@@ -12,6 +12,23 @@ SegmentRotation rotateRight(SegmentRotation rotation){
     return SegmentRotation((static_cast<int>(rotation) + 1) % 4);
 }
 
+SegmentRotation combine(SegmentRotation r1, SegmentRotation r2) {
+    switch (r1) {
+        case SegmentRotation::NONE:
+            return r2;
+        case SegmentRotation::CW_90:
+            return rotateRight(r2);
+        case SegmentRotation::CW_180:
+            return invert(r2);
+        case SegmentRotation::CW_270:
+            return rotateLeft(r2);
+    }
+}
+
+int qHash(const SegmentRotation& p) {
+    return static_cast<int>(p);
+}
+
 SegmentRotation rotate(SegmentRotation rotation, SegmentType direction) {
     if (direction == SegmentType::LEFT){
         return rotateLeft(rotation);
