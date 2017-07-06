@@ -40,8 +40,6 @@ Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const Abstra
     Path newGrey;
     QHash<QPoint, PathPoint> p2p;
 
-    int i = 0;
-
     while (!grey.empty()) {
         for (auto&& pathPoint : grey) {
             for (auto&& neighbour : level.getNeighbours(pathPoint.first, pathPoint.second)) {
@@ -56,7 +54,6 @@ Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const Abstra
                         Path way;
                         way.prepend(neighbour);
                         while (p2p.contains(last) && last != headPos){
-                            i++;
                             way.prepend(p2p[last]);
                             last = p2p[last].first;
                         }
