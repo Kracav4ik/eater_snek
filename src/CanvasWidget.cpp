@@ -28,6 +28,8 @@ void CanvasWidget::paintEvent(QPaintEvent* event) {
 
     p.fillRect(rect(), b);
 
+    p.scale(GRID_SIZE, GRID_SIZE);
+
     if (snek){
         snek->paint(p);
     }

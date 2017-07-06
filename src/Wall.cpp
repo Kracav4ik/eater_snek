@@ -10,5 +10,5 @@ const QPoint& Wall::getPos() const {
 }
 
 void Wall::paint(QPainter& p) const {
-    p.fillRect(QRect(position*GRID_SIZE, GRID_SIZE_2D), Qt::darkCyan);
+    p.fillRect(QRect(position, UNIT_SIZE_2D), Qt::darkCyan);
 }

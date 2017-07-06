@@ -41,12 +41,12 @@ Level::Level(const QRect& r): rect(r), borderWall(new Wall(QPoint())){}
 void Level::paint(QPainter& painter) const {
     QPoint point = rect.topLeft();
     for (int i = 0; i < rect.width(); ++i) {
-        painter.fillRect(QRect((point + QPoint(i, -1))*GRID_SIZE, GRID_SIZE_2D), Qt::darkGray);
-        painter.fillRect(QRect((point + QPoint(i, rect.height()))*GRID_SIZE, GRID_SIZE_2D), Qt::darkGray);
+        painter.fillRect(QRect((point + QPoint(i, -1)), UNIT_SIZE_2D), Qt::darkGray);
+        painter.fillRect(QRect((point + QPoint(i, rect.height())), UNIT_SIZE_2D), Qt::darkGray);
     }
     for (int i = 0; i < rect.width(); ++i) {
-        painter.fillRect(QRect((point + QPoint(-1, i))*GRID_SIZE, GRID_SIZE_2D), Qt::darkGray);
-        painter.fillRect(QRect((point + QPoint(rect.width(), i))*GRID_SIZE, GRID_SIZE_2D), Qt::darkGray);
+        painter.fillRect(QRect((point + QPoint(-1, i)), UNIT_SIZE_2D), Qt::darkGray);
+        painter.fillRect(QRect((point + QPoint(rect.width(), i)), UNIT_SIZE_2D), Qt::darkGray);
     }
     for (Wall* wall: _walls) {
         wall->paint(painter);

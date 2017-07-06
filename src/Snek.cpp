@@ -72,8 +72,6 @@ struct SnekSegment{
 };
 
 void Snek::paint(QPainter& p) const {
-    p.fillRect(GRID_SIZE, 2*GRID_SIZE, 5*GRID_SIZE, 3*GRID_SIZE, Qt::magenta);
-    p.drawText(2*GRID_SIZE, 4*GRID_SIZE, "S N E K");
     for (int i = segments.size(); i > 0 ; --i) {
         const SnekSegment* segment = segments[i-1];
         paintSegment(*segment, p);
@@ -110,12 +108,12 @@ Snek::~Snek() {
 
 void Snek::paintSegment(const SnekSegment& segment, QPainter& p) const{
     p.save();
-    p.translate(segment.pos*GRID_SIZE);
-    QPoint center = QPoint(GRID_SIZE, GRID_SIZE) / 2;
+    p.translate(segment.pos);
+    QPointF center(0.5, 0.5);
     p.translate(center);
     p.rotate(static_cast<int>(segment.rotation) * 90);
     p.translate(-center);
-    p.drawImage(QPoint(), img, {{GRID_SIZE * static_cast<int>(segment.type), 0}, GRID_SIZE_2D});
+    p.drawImage(QRect({}, UNIT_SIZE_2D), img, {{GRID_SIZE * static_cast<int>(segment.type), 0}, GRID_SIZE_2D});
     p.restore();
 }
 
