@@ -2,7 +2,8 @@
 
 #include <QObject>
 #include <QPoint>
-#include <QPainter>
+
+class QPainter;
 
 class Appal: public QObject {
 Q_OBJECT

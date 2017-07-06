@@ -2,29 +2,10 @@
 
 #include <QObject>
 #include <QImage>
-#include <QPoint>
+#include "snek_enums.h"
 
 class QPainter;
 class SnekSegment;
-
-enum class SegmentRotation {
-    NONE,
-    CW_90,
-    CW_180,
-    CW_270,
-};
-SegmentRotation invert(SegmentRotation rot);
-QPoint rotatePoint(const QPoint& point, const QPoint& center, SegmentRotation rotation);
-SegmentRotation combine(SegmentRotation r1, SegmentRotation r2);
-int qHash(const SegmentRotation& p);
-
-enum class SegmentType{
-    HEAD,
-    BODY,
-    RIGHT,
-    LEFT,
-    TAIL
-};
 
 class Snek : public QObject {
 Q_OBJECT

@@ -1,6 +1,5 @@
 #include "Level.h"
 
-#include "Snek.h"
 #include "Wall.h"
 #include "params.h"
 

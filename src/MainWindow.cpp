@@ -2,7 +2,23 @@
 
 #include "Appal.h"
 #include "Wall.h"
+#include "AbstractAppalStore.h"
 #include <QKeyEvent>
+
+class AppalStore : public AbstractAppalStore {
+private:
+    const QList<Appal*>& appals;
+
+public:
+    AppalStore(const QList<Appal*>& appals) : appals(appals) {}
+    QList<QPoint> getAllAppalsPos() const override {
+        QList<QPoint> result;
+        for (const Appal* appal : appals) {
+            result << appal->getPos();
+        }
+        return result;
+    }
+};
 
 MainWindow::MainWindow():
         timer(this),
@@ -127,7 +143,7 @@ void MainWindow::on_delay_valueChanged(int i) {
 }
 
 void MainWindow::toAppal() {
-    Path way = toNearestAppal(snek.getHeadPos(), snek.getHeadRotation(), appals, level);
+    Path way = toNearestAppal(snek.getHeadPos(), snek.getHeadRotation(), AppalStore(appals), level);
     QList<Commands> cmds = fromPointToCommand(way, {snek.getHeadPos(), snek.getHeadRotation()});
     for (Commands command : cmds) {
         appendCommand(command);

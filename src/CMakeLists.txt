@@ -14,6 +14,18 @@ find_package(Qt5Widgets REQUIRED)
 
 set(EXE_NAME "eater_snek")
 
+set(COMMON_SOURCES
+        AbstractAppalStore.h
+        AbstractLevel.h
+        params.h
+        pathfinding.cpp
+        pathfinding.h
+        snek_enums.cpp
+        snek_enums.h
+        )
+add_library(eater_snek_common ${COMMON_SOURCES})
+target_link_libraries(eater_snek_common Qt5::Core)
+
 set(EXE_SOURCES
         main.cpp
         eater_snek.ui
@@ -23,16 +35,13 @@ set(EXE_SOURCES
         CanvasWidget.cpp
         Snek.h
         Snek.cpp
-        params.h
         Appal.cpp
         Appal.h
         Wall.cpp
         Wall.h
         Level.cpp
         Level.h
-        pathfinding.cpp
-        pathfinding.h
         )
 
 add_executable(${EXE_NAME} ${EXE_SOURCES})
-target_link_libraries(${EXE_NAME} Qt5::Widgets Qt5::Core)
+target_link_libraries(${EXE_NAME} eater_snek_common Qt5::Widgets Qt5::Core)

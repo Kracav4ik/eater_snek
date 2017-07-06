@@ -1,6 +1,8 @@
 #include "Appal.h"
 
 #include "params.h"
+#include <QImage>
+#include <QPainter>
 
 QImage loadImage(const QString& path);
 

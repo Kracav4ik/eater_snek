@@ -2,7 +2,6 @@
 
 #include <QWidget>
 #include <QList>
-#include "Level.h"
 
 class Snek;
 class QPaintEvent;

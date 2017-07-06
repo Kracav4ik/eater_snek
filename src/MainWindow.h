@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Snek.h"
-
 #include <QMainWindow>
 #include <QList>
 #include <QTimer>
 #include <QHash>
 
 #include "ui_eater_snek.h"
+#include "Snek.h"
 #include "Level.h"
 #include "pathfinding.h"
 

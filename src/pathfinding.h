@@ -2,10 +2,10 @@
 
 #include <QList>
 #include <QPoint>
-#include "Snek.h"
+#include "snek_enums.h"
 
-class Appal;
-class Level;
+class AbstractAppalStore;
+class AbstractLevel;
 
 enum class Commands{
     FORWARD,
@@ -19,4 +19,4 @@ typedef QPair<QPoint, SegmentRotation> PathPoint;
 typedef QList<PathPoint> Path;
 
 QList<Commands> fromPointToCommand(Path list, PathPoint snek);
-Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const QList<Appal*>& appals, const Level& level);
+Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const AbstractAppalStore& appals, const AbstractLevel& level);

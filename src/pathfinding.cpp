@@ -1,7 +1,10 @@
 #include "pathfinding.h"
 
 #include "Appal.h"
-#include "Level.h"
+#include "AbstractAppalStore.h"
+#include "AbstractLevel.h"
+
+#include <QHash>
 
 int qHash(const QPoint& p){
     return qHash(p.x()) + 31*qHash(p.y());
@@ -31,7 +34,7 @@ QList<Commands> fromPointToCommand(Path list, PathPoint snek) {
     return res;
 }
 
-Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const QList<Appal*>& appals, const Level& level) {
+Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const AbstractAppalStore& appals, const AbstractLevel& level) {
     Path black;
     Path grey = {{headPos, headRot}};
     Path newGrey;
@@ -47,8 +50,8 @@ Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const QList<
                 }
                 newGrey.append(neighbour);
                 p2p[neighbour.first] = pathPoint;
-                for (const Appal* appal : appals) {
-                    if (appal->getPos() == neighbour.first){
+                for (QPoint appalPos : appals.getAllAppalsPos()) {
+                    if (appalPos == neighbour.first){
                         QPoint last = neighbour.first;
                         Path way;
                         way.prepend(neighbour);
