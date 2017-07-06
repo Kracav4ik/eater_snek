@@ -134,33 +134,6 @@ void MainWindow::toAppal() {
     }
 }
 
-void MainWindow::equal(bool rot, int count) {
-    if (count == 0){
-        return;
-    }
-    if (rot) {
-        turnLeft();
-    } else {
-        turnRight();
-    }
-
-    forwardTo(count - 1);
-}
-
-void MainWindow::turnLeft() {
-    appendCommand(Commands::LEFT);
-}
-
-void MainWindow::turnRight() {
-    appendCommand(Commands::RIGHT);
-}
-
-void MainWindow::forwardTo(int count) {
-    for (int i = 0; i < count; ++i){
-        appendCommand(Commands::FORWARD);
-    }
-}
-
 const char* const CMD_TEXT[] = {
         "W ",       // FORWARD
         "A ",       // LEFT

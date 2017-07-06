@@ -26,10 +26,6 @@ private:
     QTimer timer;
 
     void toAppal();
-    void equal(bool rot, int count);
-    void forwardTo(int count);
-    void turnRight();
-    void turnLeft();
 
     void appendCommand(Commands cmd);
 
