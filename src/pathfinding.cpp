@@ -63,7 +63,7 @@ Path toNearestAppal(const QPoint& headPos, SegmentRotation headRot, const Abstra
             }
         }
         black.append(grey);
-                grey = newGrey;
+        grey = newGrey;
         newGrey.clear();
     }
     return {};
