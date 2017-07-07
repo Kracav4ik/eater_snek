@@ -41,6 +41,9 @@ void CanvasWidget::paintEvent(QPaintEvent* event) {
     if (level) {
         level->paint(p);
     }
+    if (commands) {
+        commands->paint(p);
+    }
 }
 
 void CanvasWidget::setSnek(const Snek& s) {
@@ -71,4 +74,8 @@ void CanvasWidget::mousePressEvent(QMouseEvent* event) {
 
 void CanvasWidget::setLevel(const Level& lvl) {
     level = &lvl;
+}
+
+void CanvasWidget::setCommands(const SnekCommands& cmds) {
+    commands = &cmds;
 }

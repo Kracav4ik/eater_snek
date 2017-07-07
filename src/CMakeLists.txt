@@ -41,6 +41,8 @@ set(EXE_SOURCES
         Wall.h
         Level.cpp
         Level.h
+        SnekCommands.cpp
+        SnekCommands.h
         )
 
 add_executable(${EXE_NAME} ${EXE_SOURCES})

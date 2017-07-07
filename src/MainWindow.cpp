@@ -36,6 +36,9 @@ MainWindow::MainWindow():
     connect(&timer, SIGNAL(timeout()), this, SLOT(processQueue()));
     timer.start(delay->value());
 
+    commands.setSnek(snek);
+
+    canvas->setCommands(commands);
     canvas->setSnek(snek);
     canvas->setAppals(appals);
     canvas->setLevel(level);
@@ -47,6 +50,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event) {
     if (keybind.contains(event->key())) {
         appendCommand(keybind[event->key()]);
     }
+    canvas->update();
 }
 
 void MainWindow::on_canvas_gridClicked(const QPoint& pos, bool isLeftButton) {
@@ -119,6 +123,7 @@ void MainWindow::processQueue() {
         }
         SegmentType direction = commands2segments[command];
         if (level.getWallAt(snek.getHeadNextPos(direction))) {
+            canvas->update();
             return;
         }
         snek.addHead(direction);

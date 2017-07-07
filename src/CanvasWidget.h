@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QList>
+#include "SnekCommands.h"
 
 class Snek;
 class QPaintEvent;
@@ -14,11 +15,13 @@ private:
     const Snek* snek = nullptr;
     const QList<Appal*>* appals = nullptr;
     const Level* level = nullptr;
+    const SnekCommands* commands = nullptr;
 
 public:
     void setSnek(const Snek& s);
     void setAppals(const QList<Appal*>& apps);
     void setLevel(const Level& lvl);
+    void setCommands(const SnekCommands& cmds);
 
     explicit CanvasWidget(QWidget* parent);
 

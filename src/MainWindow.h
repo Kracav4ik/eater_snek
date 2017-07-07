@@ -9,6 +9,7 @@
 #include "Snek.h"
 #include "Level.h"
 #include "pathfinding.h"
+#include "SnekCommands.h"
 
 
 class Appal;
@@ -20,7 +21,7 @@ private:
     Snek snek;
     QList<Appal*> appals;
     Level level;
-    QList<Commands> commands;
+    SnekCommands commands;
     QHash<int, Commands> keybind;
     QTimer timer;
 
